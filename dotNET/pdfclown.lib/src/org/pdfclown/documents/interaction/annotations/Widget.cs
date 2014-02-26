@@ -136,6 +136,11 @@ namespace org.pdfclown.documents.interaction.annotations
       RectangleF box
       ) : base(page, PdfName.Widget, box, null)
     {Flags = EnumUtils.Mask(Flags, FlagsEnum.Print, true);}
+	
+    public Widget(
+      Page page
+      ) : base(page, PdfName.Widget, new RectangleF(), null, true) 
+    { Flags = EnumUtils.Mask(Flags, FlagsEnum.Locked | FlagsEnum.Invisible, true);}
 
     internal protected Widget(
       PdfDirectObject baseObject

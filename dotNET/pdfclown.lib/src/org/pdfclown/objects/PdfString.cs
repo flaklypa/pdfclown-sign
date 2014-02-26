@@ -67,7 +67,11 @@ namespace org.pdfclown.objects
       /**
         Hexadecimal form.
       */
-      Hex
+      Hex,
+      /**
+        Verbatim form.
+      */
+      Verbatim,
     };
     #endregion
 
@@ -176,6 +180,8 @@ namespace org.pdfclown.objects
           return "<" + base.ToString() + ">";
         case SerializationModeEnum.Literal:
           return "(" + base.ToString() + ")";
+        case SerializationModeEnum.Verbatim:
+          return base.ToString();
         default:
           throw new NotImplementedException();
       }
@@ -204,6 +210,9 @@ namespace org.pdfclown.objects
             break;
           case SerializationModeEnum.Hex:
             RawValue = ConvertUtils.HexToByteArray((string)value);
+            break;
+          case SerializationModeEnum.Verbatim:
+            RawValue = tokens::Encoding.Pdf.Encode((string)value);
             break;
           default:
             throw new NotImplementedException(serializationMode + " serialization mode is not implemented.");
@@ -268,6 +277,9 @@ namespace org.pdfclown.objects
             byte[] value = tokens::Encoding.Pdf.Encode(ConvertUtils.ByteArrayToHex(rawValue));
             buffer.Write(value,0,value.Length);
             buffer.WriteByte(HexRightDelimiterCode);
+            break;
+          case SerializationModeEnum.Verbatim:
+            buffer.Write(rawValue, 0, rawValue.Length);
             break;
           default:
             throw new NotImplementedException();

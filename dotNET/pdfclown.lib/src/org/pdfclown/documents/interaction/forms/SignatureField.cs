@@ -63,6 +63,15 @@ namespace org.pdfclown.documents.interaction.forms
     #endregion
 
     #region interface
+	
+    public override object Value {
+        get {
+            return BaseDataObject[PdfName.V];
+        }
+        set {
+            BaseDataObject[PdfName.V] = (value as PdfReference);
+        }
+    }
     #endregion
     #endregion
   }

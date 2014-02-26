@@ -30,6 +30,8 @@ using org.pdfclown.documents.interaction.annotations;
 using org.pdfclown.objects;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace org.pdfclown.documents.interaction.forms
 {
@@ -94,6 +96,71 @@ namespace org.pdfclown.documents.interaction.forms
       {return Resources.Wrap(BaseDataObject.Get<PdfDictionary>(PdfName.DR));}
       set
       {BaseDataObject[PdfName.DR] = value.BaseObject;}
+    }
+
+    /**
+      <summary>Returns true if this document has signatures.</summary>
+    */
+    public bool HasSignatures {
+        get { return Signatures.Count > 0; }
+    }
+
+    /**
+      <summary>List the signatures in the order in  which they were added.</summary>
+    */
+    public IList<ISignature> Signatures {
+        get { return Signature.RetrieveAllSignatureFields(Fields).OrderBy(s => s.SignedRevisionSize).ToList(); }
+    }
+    #endregion
+    #region private
+    private class Signature : ISignature {
+
+        private readonly int[] FirstByteRange;
+        private readonly int[] SecondByteRange;
+
+        public Signature(SignatureField signatureField) {
+
+            PdfIndirectObject obj = signatureField.File.IndirectObjects[(signatureField.Value as PdfReference).ObjectNumber];
+            PdfSignatureDictionary SignatureDictionary = new PdfSignatureDictionary((PdfDictionary)obj.Resolve());
+            if (SignatureDictionary[PdfSignatureDictionary.Filter] != null) {
+                Filter = SignatureDictionary[PdfSignatureDictionary.Filter].ToString();
+            }
+            if (SignatureDictionary[PdfSignatureDictionary.SubFilter] != null) {
+                SubFilter = SignatureDictionary[PdfSignatureDictionary.SubFilter].ToString();
+            }
+            PdfArray byteRange = SignatureDictionary[PdfSignatureDictionary.ByteRange] as PdfArray;
+            FirstByteRange = new int[] { ((PdfInteger)(byteRange)[0]).IntValue, ((PdfInteger)(byteRange)[1]).IntValue };
+            SecondByteRange = new int[] { ((PdfInteger)(byteRange)[2]).IntValue, ((PdfInteger)(byteRange)[3]).IntValue };
+            Name = signatureField.Name;
+        }
+
+        public string Name { get; private set; }
+
+        public string Filter { get; private set; }
+
+        public string SubFilter { get; private set; }
+
+        public int[] SignatureRange {
+            get { return new int[] { FirstByteRange[1] + 1, SecondByteRange[0] - FirstByteRange[1] - 2 }; }
+        }
+
+        public int[] SignedBytesRange {
+            get { return new int[] { FirstByteRange[0], FirstByteRange[1], SecondByteRange[0], SecondByteRange[1] }; }
+        }
+
+        public int[] SignedRevisionRange {
+            get { return new int[] { FirstByteRange[0], SecondByteRange.Sum() }; }
+        }
+
+        public int SignedRevisionSize {
+            get { return SecondByteRange.Sum(); }
+        }
+
+        public static List<ISignature> RetrieveAllSignatureFields(Fields fields) {
+            return (from field in fields.Values
+                    where field.BaseDataObject[PdfName.FT].Equals(PdfName.Sig)
+                    select new Signature(field as SignatureField) as ISignature).ToList();
+        }
     }
     #endregion
     #endregion

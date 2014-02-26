@@ -78,6 +78,19 @@ namespace org.pdfclown.objects
 
     #region dynamic
     #region constructors
+    public Rectangle()
+        : this(new PdfArray(
+          new PdfDirectObject[]
+          {
+            PdfReal.Get(0), // Left (X).
+            PdfReal.Get(0), // Bottom (Y).
+            PdfReal.Get(0), // Right.
+            PdfReal.Get(0) // Top.
+          }
+          )
+        ) 
+    {}
+
     public Rectangle(
       RectangleF rectangle
       ) : this(

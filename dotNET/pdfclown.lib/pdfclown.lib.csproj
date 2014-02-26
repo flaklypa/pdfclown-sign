@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,6 +9,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>org.pdfclown</RootNamespace>
     <AssemblyName>PDFClown</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -19,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -26,8 +29,9 @@
     <OutputPath>build\package</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="src\org\pdfclown\bytes\filters\ASCII85Filter.cs" />
@@ -219,6 +223,7 @@
     <Compile Include="src\org\pdfclown\documents\interaction\annotations\VertexShape.cs" />
     <Compile Include="src\org\pdfclown\documents\interaction\annotations\Widget.cs" />
     <Compile Include="src\org\pdfclown\documents\interaction\annotations\WidgetActions.cs" />
+    <Compile Include="src\org\pdfclown\documents\interaction\forms\ISignature.cs" />
     <Compile Include="src\org\pdfclown\documents\interaction\forms\styles\DefaultStyle.cs" />
     <Compile Include="src\org\pdfclown\documents\interaction\forms\styles\FieldStyle.cs" />
     <Compile Include="src\org\pdfclown\documents\interaction\forms\styles\namespace.cs" />
@@ -290,6 +295,7 @@
     <Compile Include="src\org\pdfclown\objects\PdfObjectWrapper.cs" />
     <Compile Include="src\org\pdfclown\objects\PdfReal.cs" />
     <Compile Include="src\org\pdfclown\objects\PdfReference.cs" />
+    <Compile Include="src\org\pdfclown\objects\PdfSignatureDictionary.cs" />
     <Compile Include="src\org\pdfclown\objects\PdfStream.cs" />
     <Compile Include="src\org\pdfclown\objects\PdfString.cs" />
     <Compile Include="src\org\pdfclown\objects\PdfTextString.cs" />
@@ -301,6 +307,7 @@
     <Compile Include="src\org\pdfclown\tools\namespace.cs" />
     <Compile Include="src\org\pdfclown\tools\PageManager.cs" />
     <Compile Include="src\org\pdfclown\tools\PageStamper.cs" />
+    <Compile Include="src\org\pdfclown\tools\SignatureManager.cs" />
     <Compile Include="src\org\pdfclown\tools\TextExtractor.cs" />
     <Compile Include="src\org\pdfclown\util\collections\generic\IExtCollection.cs" />
     <Compile Include="src\org\pdfclown\util\collections\generic\IExtList.cs" />
@@ -555,13 +562,5 @@
       <LogicalName>fonts.cff.StandardStrings</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\org\pdfclown\documents\functions\" />
-    <Folder Include="src\org\pdfclown\util\parsers\" />
-    <Folder Include="src\org\pdfclown\util\math\geom\" />
-    <Folder Include="src\org\pdfclown\tokens\" />
-    <Folder Include="src\org\pdfclown\documents\contents\layers\" />
-    <Folder Include="src\org\pdfclown\util\metadata\" />
-    <Folder Include="src\org\pdfclown\documents\interchange\access\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

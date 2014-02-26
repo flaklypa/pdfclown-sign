@@ -31,6 +31,8 @@ namespace org.pdfclown.bytes
   public interface IOutputStream
     : IStream
   {
+    long Position { get; set; }
+    
     /**
       <summary>Writes a byte array into the stream.</summary>
       <param name="data">Byte array to write into the stream.</param>

@@ -168,7 +168,8 @@ namespace org.pdfclown.documents.interaction.annotations
       Page page,
       PdfName subtype,
       RectangleF box,
-      string text
+      string text,
+	  bool invisible = false
       ) : base(
         page.Document,
         new PdfDictionary(
@@ -187,6 +188,7 @@ namespace org.pdfclown.documents.interaction.annotations
           )
         )
     {
+	  Invisible = invisible;
       page.Annotations.Add(this);
       Box = box;
       Text = text;
@@ -251,6 +253,8 @@ namespace org.pdfclown.documents.interaction.annotations
         {BaseDataObject.Remove(PdfName.Border);}
       }
     }
+	
+	public bool Invisible { get; private set; }
 
     /**
       <summary>Gets/Sets the location of the annotation on the page in default user space units.
@@ -260,7 +264,15 @@ namespace org.pdfclown.documents.interaction.annotations
     {
       get
       {
-        org.pdfclown.objects.Rectangle box = org.pdfclown.objects.Rectangle.Wrap(BaseDataObject[PdfName.Rect]);
+		if (Invisible) {
+            return new RectangleF(
+              (float)0,
+              (float)0,
+              (float)0,
+              (float)0
+              );
+        }
+		org.pdfclown.objects.Rectangle box = org.pdfclown.objects.Rectangle.Wrap(BaseDataObject[PdfName.Rect]);
         return new RectangleF(
           (float)box.Left,
           (float)(GetPageHeight() - box.Top),
@@ -270,12 +282,16 @@ namespace org.pdfclown.documents.interaction.annotations
       }
       set
       {
-        BaseDataObject[PdfName.Rect] = new org.pdfclown.objects.Rectangle(
-          value.X,
-          GetPageHeight() - value.Y,
-          value.Width,
-          value.Height
-          ).BaseDataObject;
+		if (Invisible) {
+			BaseDataObject[PdfName.Rect] = new org.pdfclown.objects.Rectangle().BaseDataObject;
+		} else {
+			BaseDataObject[PdfName.Rect] = new org.pdfclown.objects.Rectangle(
+			  value.X,
+			  GetPageHeight() - value.Y,
+			  value.Width,
+			  value.Height
+			  ).BaseDataObject;
+		}
       }
     }
 

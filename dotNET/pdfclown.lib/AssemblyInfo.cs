@@ -1,8 +1,8 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("PDF Clown for .NET")]
-[assembly: AssemblyDescription("PDF engine")]
+[assembly: AssemblyTitle("PDF Clown for .NET with basic signature support")]
+[assembly: AssemblyDescription("PDF engine (fork of project at http://pdfclown.wordpress.com/)")]
 [assembly: AssemblyConfiguration("development")]
 [assembly: AssemblyCompany("Stefano Chizzolini")]
 [assembly: AssemblyProduct("PDF Clown for .NET")]
@@ -17,7 +17,7 @@ using System.Runtime.CompilerServices;
   You can specify all values by your own or you can build default build and revision
   numbers with the '*' character (the default):
 */
-[assembly: AssemblyVersion("0.1.3")]
+[assembly: AssemblyVersion("0.1.0")]
 
 /*
   The following attributes specify the key for the sign of your assembly.

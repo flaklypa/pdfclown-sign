@@ -43,8 +43,6 @@ namespace org.pdfclown.tools {
 
         private class SignatureGenerator : ISignatureGenerator {
 
-            private static readonly PdfName SigFlags = new PdfName("SigFlags");
-
             private byte[] originalPdf;
             private byte[] signedPdf;
             private PdfSignatureDictionary signatureDictionary;
@@ -67,9 +65,7 @@ namespace org.pdfclown.tools {
                     SignatureField sigField = new SignatureField(name ?? Guid.NewGuid().ToString(), new Widget(file.Document.Pages.First()));
                     sigField.Value = signatureDictionary.Reference;
                     file.Document.Form.Fields.Add(sigField);
-                    if (!file.Document.Form.BaseDataObject.ContainsKey(SigFlags)) {
-                        file.Document.Form.BaseDataObject.Add(SigFlags, new PdfInteger(3));
-                    }
+                    file.Document.Form.SigFlags = Form.SigFlagsEnum.AppendOnly | Form.SigFlagsEnum.SignatureExist;
 
                     // Serialize the pdf
                     MemoryStream ms = new MemoryStream();

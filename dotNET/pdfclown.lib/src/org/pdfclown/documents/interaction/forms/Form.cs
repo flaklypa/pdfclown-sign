@@ -42,6 +42,24 @@ namespace org.pdfclown.documents.interaction.forms
   public sealed class Form
     : PdfObjectWrapper<PdfDictionary>
   {
+    #region types
+    /**
+      <summary>Signature flags [PDF:1.3:8.6.1].</summary>
+    */
+    [Flags]
+    public enum SigFlagsEnum
+    {
+        /**
+          <summary>If set, the document contains at least one signature field.</summary>
+        */
+        SignatureExist = 0x1,
+        /**
+          <summary>If set, the document must be updated incrementally.</summary>
+        */
+        AppendOnly = 0x2,
+    }
+    #endregion
+
     #region static
     #region interface
     #region public
@@ -96,6 +114,20 @@ namespace org.pdfclown.documents.interaction.forms
       {return Resources.Wrap(BaseDataObject.Get<PdfDictionary>(PdfName.DR));}
       set
       {BaseDataObject[PdfName.DR] = value.BaseObject;}
+    }
+
+    public SigFlagsEnum SigFlags 
+    {
+        get 
+        {
+            PdfInteger sigFlagsObject = (PdfInteger)BaseDataObject.Resolve(PdfName.SigFlags);
+            if (sigFlagsObject == null)
+                return (SigFlagsEnum)Enum.ToObject(typeof(SigFlagsEnum), null);
+
+            return (SigFlagsEnum)Enum.ToObject(typeof(SigFlagsEnum), sigFlagsObject.RawValue);
+        }
+        set 
+        { BaseDataObject[PdfName.SigFlags] = new PdfInteger((int)value); }
     }
 
     /**
@@ -154,6 +186,10 @@ namespace org.pdfclown.documents.interaction.forms
 
         public int SignedRevisionSize {
             get { return SecondByteRange.Sum(); }
+        }
+
+        public int MaxSignatureSize {
+            get { return SignatureRange[1] / 2; }
         }
 
         public static List<ISignature> RetrieveAllSignatureFields(Fields fields) {

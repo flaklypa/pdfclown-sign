@@ -14,5 +14,6 @@ namespace org.pdfclown.documents.interaction.forms {
         int[] SignedBytesRange { get; }
         int[] SignedRevisionRange { get; }
         int SignedRevisionSize { get; }
+        int MaxSignatureSize { get; }
     }
 }

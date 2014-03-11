@@ -450,6 +450,7 @@ namespace org.pdfclown.objects
     public static readonly PdfName SetOCGState = new PdfName("SetOCGState");
     public static readonly PdfName Shading = new PdfName("Shading");
     public static readonly PdfName Sig = new PdfName("Sig");
+    public static readonly PdfName SigFlags = new PdfName("SigFlags");
     public static readonly PdfName SinglePage = new PdfName("SinglePage");
     public static readonly PdfName Size = new PdfName("Size");
     public static readonly PdfName Slash = new PdfName("Slash");

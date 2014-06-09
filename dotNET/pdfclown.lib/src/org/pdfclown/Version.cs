@@ -27,6 +27,7 @@ using org.pdfclown.objects;
 using org.pdfclown.util.metadata;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -42,7 +43,7 @@ namespace org.pdfclown
     #region static
     #region fields
     private static readonly Regex versionPattern = new Regex("^(\\d+)\\.(\\d+)$");
-    private static readonly IDictionary<string,Version> versions = new Dictionary<string,Version>();
+    private static readonly ConcurrentDictionary<string, Version> versions = new ConcurrentDictionary<string, Version>();
     #endregion
 
     #region interface
@@ -56,16 +57,13 @@ namespace org.pdfclown
       string version
       )
     {
-      if(!versions.ContainsKey(version))
-      {
+      return versions.GetOrAdd(version, k => {
         Match versionMatch = versionPattern.Match(version);
-        if(!versionMatch.Success)
+        if (!versionMatch.Success) {
           throw new Exception("Invalid PDF version format: '" + versionPattern + "' pattern expected.");
-
-        Version versionObject = new Version(Int32.Parse(versionMatch.Groups[1].Value),Int32.Parse(versionMatch.Groups[2].Value));
-        versions[version] = versionObject;
-      }
-      return versions[version];
+        }
+        return new Version(Int32.Parse(versionMatch.Groups[1].Value), Int32.Parse(versionMatch.Groups[2].Value));
+      });
     }
     #endregion
     #endregion
